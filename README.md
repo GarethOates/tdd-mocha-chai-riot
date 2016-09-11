@@ -1,4 +1,4 @@
-# Tutorial: Using TDD with Riot+mocha+chai 
+# Tutorial: Using TDD with Riot+mocha+chai
 TDD using mocha+chai to test Riot tags.
 Riot is a React- like user interface library http://riotjs.com.
 Mocha is a feature-rich JavaScript test framework https://mochajs.org/
@@ -7,7 +7,7 @@ Chai is a BDD / TDD assertion library http://chaijs.com/
 ##Installation
 You can read the tutorial, or just install the repo.
 
-``` 
+```
 git clone https://github.com/vitogit/tdd-mocha-chai-riot
 cd tdd-mocha-chai-riot
 npm install
@@ -15,7 +15,7 @@ npm install
 And then just `npm test` to run the tests.
 
 ##Tutorial
-This is a simple tutorial about how to setup an environment to do TDD (Test driven development) using karma+mocha+chai to test Riot tags and their properties and functions.You are going to need the last version of Node. Download it from here https://nodejs.org/en/download/ 
+This is a simple tutorial about how to setup an environment to do TDD (Test driven development) using karma+mocha+chai to test Riot tags and their properties and functions.You are going to need the last version of Node. Download it from here https://nodejs.org/en/download/
 
 We are going to use phantomJs because we need to test the DOM, so an easy setup is to use Karma to run the test.
 
@@ -26,7 +26,7 @@ mkdir tdd-mocha-chai-riot
 npm init
 ```
 
-`npm init` will generate the package.json file, it will ask you for some info, use the defaults values. Then edit package.json and add the devDependencies (this is how it will look https://github.com/vitogit/tdd-mocha-chai-riot/blob/master/package.json) 
+`npm init` will generate the package.json file, it will ask you for some info, use the defaults values. Then edit package.json and add the devDependencies (this is how it will look https://github.com/vitogit/tdd-mocha-chai-riot/blob/master/package.json)
 ```
   "devDependencies": {
     "chai": "^3.5.0",
@@ -99,12 +99,12 @@ SUMMARY:
 V 0 tests completed
 ```
 
-I added failOnEmptyTestSuite: false in the karma.config.js file because by default Karma returns an error if you have an empty test. 
+I added failOnEmptyTestSuite: false in the karma.config.js file because by default Karma returns an error if you have an empty test.
 
-Our goal is to create a tag that prints Hello {name} inside a H1 tag. So to write the test, the first thing we need to do is to create a tag in the dom called ‘hello’. We just use this line 
+Our goal is to create a tag that prints Hello {name} inside a H1 tag. So to write the test, the first thing we need to do is to create a tag in the dom called ‘hello’. We just use this line
 `var html = document.createElement('hello')` and then we are going to append that node to the body `document.body.appendChild(html)`
 and mount it, like this `riot.mount('hello')`
-This is going to return an array of tags. Since we just added one, we are going to write this to get the mounted tag: 
+This is going to return an array of tags. Since we just added one, we are going to write this to get the mounted tag:
 `tag = riot.mount('hello')[0]`
 Then we will check if the tag exist (not undefined and not null) with the mocha method `expect(tag).to.exist`
 So the test code will look like this
@@ -137,7 +137,7 @@ The next goal is: given a name parameter, print Hello {name}. We need a property
     document.body.appendChild(html)
     tag = riot.mount('hello')[0]
     expect(tag.name).to.exist
-  }) 
+  })
 ```  
 
 Run the test and of course it fails. Let’s make it pass. Edit the hello.tag and write this:
@@ -148,7 +148,7 @@ Run the test and of course it fails. Let’s make it pass. Edit the hello.tag an
   </script>
 </hello>
 ```
-This way, Riot will know that our tag has a "name" property. Run the test again and it will work. 
+This way, Riot will know that our tag has a "name" property. Run the test again and it will work.
 
 ###Refactor: Move duplicate code to before hook
 Now that we have confidence that the code is good, let's refactor it a little bit. As you can see we have duplicate code in our tests. Let’s use the mocha before hook, so it will only execute one time. Move the duplicate code to a before hook, editing the tests
@@ -157,7 +157,7 @@ Now that we have confidence that the code is good, let's refactor it a little bi
     var html = document.createElement('hello')
     document.body.appendChild(html)
     tag = riot.mount('hello')[0]
-  }); 
+  });
 ```
 Run the tests again, and it should pass.
 
@@ -167,7 +167,7 @@ Our next goal is to mount the tag passing the name property. Let´s write the fa
   it('mounts a hello tag with a setted name', function() {  
     tag = riot.mount('hello', {name: 'Carl'})[0]
     expect(tag.name).to.be.eq('Carl')
-  }) 
+  })
 ```
 It will  fail with:     `expected '' to equal 'Carl'`, so to make it work we need to use the "opts" functionality that Riot gives us. Just update the hello.tag like this
 ```html
@@ -177,7 +177,7 @@ It will  fail with:     `expected '' to equal 'Carl'`, so to make it work we nee
   </script>
 </hello>
 ```
-Run the test again, and the last test pass, but the second test is not working. What´s happening? 
+Run the test again, and the last test pass, but the second test is not working. What´s happening?
 This shows why TDD is useful: when we introduce new functionality we can break the old code. So how can we fix this? It´s easy, the problem is that it’s expecting a string, but it’s undefined. So we change the code a little, so if opts.name is undefined then we use an empty string.
 ```html
 <hello>
@@ -199,8 +199,8 @@ Next, we want to show the Hello {name} inside a H1 tag, so let's write a new tes
   it('prints <h1>Hello {name}</h1> ', function() {  
     tag = riot.mount('hello', {name: 'Carl'})[0]
     var tagText = document.querySelector('hello > h1').textContent
-    expect(tagText).to.be.eq('Hello Carl') 
-  }) 
+    expect(tagText).to.be.eq('Hello Carl')
+  })
 ```
 As you can see we are using `document.querySelector('hello > h1').textContent`. This will search for a h1 tag inside a hello tag and get the textContent. We don't need to run the tests because it will run automatically and it will fail. So to make it work we edit the hello.tag like this.
 ```html
@@ -231,4 +231,4 @@ We are going to add a new function called uppercase like this
 ```
 and now all tests will pass.
 
-I hope you liked the tutorial. We learnt how to setup mocha+chai+karma to test riot tags, how to autorun the tests and how to test Riot tag's properties and functions. 
+I hope you liked the tutorial. We learnt how to setup mocha+chai+karma to test riot tags, how to autorun the tests and how to test Riot tag's properties and functions.

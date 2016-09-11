@@ -21,5 +21,5 @@ module.exports = function(config) {
     reporters: ['mocha'],
     failOnEmptyTestSuite: false,
     singleRun: true
-  })
-}
+  });
+};
